@@ -1,0 +1,34 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-inventory:
+    runs-on: [ ansible-master ]
+
+    steps:
+     
+
+      - name: Create inventory directory
+        run: |
+          sudo -u ryan mkdir -p /home/ryan/ansible/
+          sudo chown -R ryan:ryan /home/ryan/ansible
+
+      - name: Generate inventory.yaml
+        run: |
+          sudo -u ryan bash -c 'cat > /home/ryan/ansible/inventory.yaml' << 'EOF'
+          ---
+          all:
+            children:
+              webservers:
+                hosts:
+                  web01:
+                    ansible_host: 10.192.0.2
+                    ansible_user: ryan
+                    
+
+              databases:
+                hosts:
+                  db01:
+                    ansible_host: 10.194.0.4
+                    ansible_user: ryan
+                    db_version: 14
